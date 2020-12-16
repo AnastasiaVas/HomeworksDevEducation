@@ -1,0 +1,73 @@
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Калькулятор</title>
+<style type="text/css">
+	#calculator * {font-size: 32px;}
+	#calculator table {border: solid 6px silver; border-spacing: 6px; background-color: #EEE; }
+	#calculator table td {border-spacing: 6px;}
+	input.display {width: 200px; text-align: right;}
+	td.buttons {border-top: solid 2px silver;}	
+	input[type= button] {width: 332px; height: 60px;}
+	input[class="text-block"] {
+  		width: 100px;
+	}
+	output[type=text] {
+  		width: 100px;
+	}
+	text-block {
+    		width: 50px;
+	}
+</style>
+</head>
+
+<body>
+<form name="calc" id="calculator">
+	<table>
+	<tr>
+	<td>
+		<p style="font-size:28px">Число 1</p>
+	</td>
+	<td>
+		<input type="text" name="input" size="16" class="display">
+	</td>
+	</tr>
+	<tr>
+	<td>
+	<div class="text-block">
+		<p style="font-size:28px">Число 2</p>
+	</div>
+	</td>
+	<td>
+		<input type="text" name="input" size="16" class="display">
+	</td>
+	</tr>
+	<tr>
+	<td>
+	<div class="text-block">
+		<p style="font-size:28px">Операция</p>
+	</div>
+	</td>
+	<td>
+		<input type="text" name="input3" size="16" class="display">
+	</td>
+	</tr>
+	<td class="buttons" colspan="2">
+		<input type="button" name="doit" value="Посчитать" OnClick="calc.input4.value = eval(calc.input.value.toString()+calc.input3.value.toString()+calc.input2.value.toString())">
+
+	</td>
+	</tr>
+	<tr>
+	<td>
+	<div class="text-block">
+		<p style="font-size:28px">Результат</p>
+	</div>
+	</td>
+	<td>
+		<input type="text" name="input4" size="16" class="display">
+	</td>
+	</tr>
+	</table>
+</form>
+</body>
+</html>
