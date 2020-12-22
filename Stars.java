@@ -1,9 +1,6 @@
 package main;
 
 public class Stars {
-    public static void main(String args[]) {
-        Stars.triangle3();
-    }
 
     public static void square1() {
         int rowsTotal = 7;
@@ -43,18 +40,13 @@ public class Stars {
         for (int rowNum = 1; rowNum <= colTotal; rowNum++) {
             for (int colNum = 1; colNum <= colTotal; colNum++) {
                 if (rowNum == 1 && colNum != 7) {
-                    System.out.print("* ");
-                } else if (colNum == 1) {
+                    System.out.print("*  ");
+                } else if (colNum == 1 || (colNum == 7 && rowNum == 1)) {
                     System.out.print("*");
-                } else if (((rowsTotal - rowNum + 1) == colNum) && colNum != 7) {
-                    System.out.print(" * ");
-                } else if (colNum == 7 && rowNum == 1) {
-                    System.out.print("*");
+                } else if ((rowsTotal - rowNum + 1) == colNum) {
+                    System.out.print(" *  ");
                 } else {
-                    System.out.print("  ");
-                }
-                if (colNum != colTotal) {
-                    System.out.print(" ");
+                    System.out.print("   ");
                 }
             }
             System.out.println();
@@ -70,11 +62,10 @@ public class Stars {
                     System.out.print(" *");
                 } else if (colNum == 7) {
                     System.out.print("*");
-                } else if (rowNum == colNum && colNum != 7) {
+                } else if (rowNum == colNum) {
                     System.out.print("* ");
-                } else if (colNum == 7 && rowNum == 1) {
-                    System.out.print("*");
-                } else {
+                }
+                else {
                     System.out.print("  ");
                 }
                 if (colNum != 1) {
@@ -91,18 +82,13 @@ public class Stars {
         for (int rowNum = rowsTotal; rowNum > 0; rowNum--) {
             for (int colNum = colTotal; colNum > 0; colNum--) {
                 if (rowNum == 1 && colNum != 7) {
-                    System.out.print(" *");
-                } else if (colNum == 1) {
+                    System.out.print("  *");
+                } else if (colNum == 1 || (colNum == 7 && rowNum == 1)) {
                     System.out.print("*");
-                } else if (((rowsTotal - rowNum + 1) == colNum) && colNum != 7) {
-                    System.out.print("* ");
-                } else if (colNum == 7 && rowNum == 1) {
-                    System.out.print("*");
+                } else if (((rowsTotal - rowNum + 1) == colNum)) {
+                    System.out.print("*  ");
                 } else {
-                    System.out.print("  ");
-                }
-                if (colNum != 1) {
-                    System.out.print(" ");
+                    System.out.print("   ");
                 }
             }
             System.out.println();
@@ -116,12 +102,10 @@ public class Stars {
             for (int colNum = colTotal; colNum > 0; colNum--) {
                 if (rowNum == 7 && colNum != 7) {
                     System.out.print(" *");
-                } else if (colNum == 1) {
+                } else if (colNum == 1 || (colNum == 7 && rowNum == 7)) {
                     System.out.print("*");
-                } else if (rowNum == colNum && colNum != 7) {
+                } else if (rowNum == colNum) {
                     System.out.print("* ");
-                } else if (colNum == 7 && rowNum == 7) {
-                    System.out.print("*");
                 } else {
                     System.out.print("  ");
                 }
@@ -163,7 +147,7 @@ public class Stars {
                         System.out.print(" * ");
                     } else if (rowNum == 1 && colNum == 1 ) {
                         System.out.print("* ");
-                    } else if (rowNum == 1 && colNum == 7 ) {
+                    } else if (rowNum == 1) {
                         System.out.print(" *");
                     }
                     else if (((colTotal - colNum + 1) == rowNum) || (colNum == rowNum)) {
