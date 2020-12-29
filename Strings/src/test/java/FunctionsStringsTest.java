@@ -36,9 +36,42 @@ public class FunctionsStringsTest {
     }
 
     @Test
-    void shortestWordTest_EXCEPTION(){
-        Assertions.assertThrows(NumberFormatException.class, () -> {
+    public void shortestWordTest_EXCEPTION(){
+        Assertions.assertThrows(NullPointerException.class, () -> {
            funStrs.shortestWord(" ,   /// .");
         });
+    }
+
+    @ParameterizedTest
+    @MethodSource("listOfSentences2")
+    void oneCopyOfEachCharTest(String input, String output) {
+        assertEquals(output, funStrs.oneCopyOfEachChar(input));
+    }
+
+    private static Stream<Arguments> listOfSentences2() {
+        return Stream.of(
+                arguments("I have an apple.", "I havenpl."),
+                arguments("There is a peach in my garden.", "Ther isapcnmygd."),
+                arguments("The    cat    is    on   the tree   ", "The catisonr"),
+                arguments("  The,,,, cat is . on the /// tree.", " The,catis.on/r"),
+                arguments("", "")
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("listOfSentences3")
+    void numOfWordsTest(String input, int output) {
+        assertEquals(output, funStrs.oneCopyOfEachChar(input));
+    }
+
+    private static Stream<Arguments> listOfSentences3() {
+        return Stream.of(
+                arguments("I have an apple.", 4),
+                arguments("There is a peach in my garden.", 7),
+                arguments("The    cat    is    on   the tree   ", 6),
+                arguments("  The,,,, cat is . on the /// tree.", 6),
+                arguments("", 0),
+                arguments(" ,   /// .", 0)
+        );
     }
 }
