@@ -1,7 +1,5 @@
 package Homework1;
 
-import javafx.util.Pair;
-
 public class Loops {
 
     public static void main (String args[]){
@@ -93,7 +91,10 @@ public class Loops {
         }
     }
 
-    public static Pair sumEvenNums (int num){
+    public static String sumEvenNumsBetweenOneAndNinetyNine (int num){
+        if (num < 1 || num > 99){
+            throw new IllegalArgumentException("Entered value should fall between 1 and 99.");
+        }
         int i = 1;
         int sum = 0;
         int count = 0;
@@ -104,8 +105,8 @@ public class Loops {
             }
             i++;
         }
-        Pair<Integer, Integer> pair = new Pair<>(sum, count);
-        return pair;
+        String answer = "Sum of even numbers withing a range 1-" + num + " is " + sum + ", and the number of even numbers is " + count;
+        return answer;
     }
 
     public static int numOfDig(int num){
