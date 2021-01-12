@@ -6,7 +6,6 @@ public class TemperatureCalc implements ICalculator {
     double receivedValue;
     @Override
     public double valueToStandardUnit(String unitName, double receivedValue) {
-        this.receivedValue = receivedValue;
         double answer = 0;
         for (Units unit : Units.groupTemperature){
             if (unit.getName().equals(unitName)){
@@ -18,11 +17,10 @@ public class TemperatureCalc implements ICalculator {
 
     @Override
     public double valueFromStandardUnit(String unitName, double receivedValue) {
-        this.receivedValue = receivedValue;
         double answer = 0;
         for (Units unit : Units.groupTemperature){
             if (unit.getName().equals(unitName)){
-                answer = chooseUnitFromStandardUnit(unit);
+                answer = chooseUnitToStandardUnit(unit);
             }
         }
         return answer;

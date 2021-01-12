@@ -5,8 +5,8 @@ import java.util.EnumSet;
 
 public enum Units {
     KM(1000,"km"),
-    MILE(0.00062,"miles"),
-    NAUTICAL_MILE(0.00062,"nautical mile"),
+    MILE(0.000621371,"mile"),
+    NAUTICAL_MILE(0.000539957,"nautical mile"),
     CABLE(0.054,"cable"),
     LEAGUE(0.0002071237,"league"),
     FOOT(3.28084,"foot"),
@@ -36,7 +36,7 @@ public enum Units {
     CUBIC_METRE (0.001, "cubic metre"),
     GALLON (0.264172, "gallon"),
     PINT (2.11338, "pint"),
-    QUARTS (1.05669, "quarts"),
+    QUARTS (1.05669, "quart"),
     BARREL (0.00628981, "barrel"),
     CUBIC_FOOT (0.0353147, "cubic foot"),
     CUBIC_INCH (61.0237, "cubic inch");
