@@ -1,11 +1,14 @@
 package listeners;
 
+import claculations.*;
 import utils.Switcher;
 import view.PanelChanges;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import static utils.Constants.ConvView.*;
+import static utils.Constants.LabelsText.*;
 
 public class ButtonsListener implements ActionListener {
 
@@ -22,6 +25,7 @@ public class ButtonsListener implements ActionListener {
     private final JTextArea outputText;
     private final JButton switchB;
     JPanel jp;
+    ICalculator calculator;
 
     public ButtonsListener(JPanel panel, ButtonGroup bGroup, JButton button, JButton switchB, JButton lengthB, JButton temperatureB, JButton weightB, JButton timeB, JButton volumeB, JTextField inputText, JTextArea outputText) {
         this.bGroup = bGroup;
@@ -42,87 +46,55 @@ public class ButtonsListener implements ActionListener {
         PanelChanges panelCh = new PanelChanges();
         Object source = e.getSource();
         Switcher switcher = new Switcher();
-        if (source == button){
+        if (source == button) {
             try {
-                switch (convCategory) {
-                    case "length" -> {
-                        double answerDouble = switcher.LengthSwitcher(jp, inputText);
-                        if (answerDouble % 1 == 0) {
-                            outputText.setText(String.valueOf((int) answerDouble));
-                        } else {
-                            outputText.setText(String.valueOf(answerDouble));
-                        }
-                    }
-                    case "temperature" -> {
-                    double answerDouble = switcher.TempSwitcher(jp, inputText);
-                    if (answerDouble % 1 == 0) {
-                        outputText.setText(String.valueOf((int) answerDouble));
-                    } else {
-                        outputText.setText(String.valueOf(answerDouble));
-                    }
+                double answerDouble = switcher.switchMeasurementSystems(jp, inputText, calculator);
+                if (answerDouble % 1 == 0) {
+                    outputText.setText(String.valueOf((int) answerDouble));
+                } else {
+                    outputText.setText(String.valueOf(answerDouble));
                 }
-                    case "weight" -> {
-                        double answerDouble = switcher.WeightSwitcher(jp, inputText);
-                        if (answerDouble % 1 == 0) {
-                            outputText.setText(String.valueOf((int) answerDouble));
-                        } else {
-                            outputText.setText(String.valueOf(answerDouble));
-                        }
-                    }
-                    case "time" -> {
-                        double answerDouble = switcher.TimeSwitcher(jp, inputText);
-                        if (answerDouble % 1 == 0) {
-                            outputText.setText(String.valueOf((int) answerDouble));
-                        } else {
-                            outputText.setText(String.valueOf(answerDouble));
-                        }
-                    }
-                    case "volume" -> {
-                        double answerDouble = switcher.VolumeSwitcher(jp, inputText);
-                        if (answerDouble % 1 == 0) {
-                            outputText.setText(String.valueOf((int) answerDouble));
-                        } else {
-                            outputText.setText(String.valueOf(answerDouble));
-                        }
-                    }
-                }
-            }
-            catch (NullPointerException ex){
+            } catch (NullPointerException ex) {
                 outputText.setText(ex.getMessage());
             }
         } else if (source == switchB) {
             String panelName = jp.getName();
-            if (panelName.equals("From")) {
+            if (panelName.equals(FROM)) {
                 switch (convCategory) {
-                    case "length" -> jp = panelCh.LengthPanelToMeters(panel, bGroup, switchB);
-                    case "temperature" -> jp = panelCh.TempPanelToCelsius(panel, bGroup, switchB);
-                    case "weight" -> jp = panelCh.WeightPanelToKG(panel, bGroup, switchB);
-                    case "time" -> jp = panelCh.TimePanelToSec(panel, bGroup, switchB);
-                    case "volume" -> jp = panelCh.VolumePanelToLiters(panel, bGroup, switchB);
+                    case LENGTH -> jp = panelCh.LengthPanelToMeters(panel, bGroup, switchB);
+                    case TEMPERATURE -> jp = panelCh.TempPanelToCelsius(panel, bGroup, switchB);
+                    case WEIGHT -> jp = panelCh.WeightPanelToKG(panel, bGroup, switchB);
+                    case TIME -> jp = panelCh.TimePanelToSec(panel, bGroup, switchB);
+                    case VOLUME -> jp = panelCh.VolumePanelToLiters(panel, bGroup, switchB);
                 }
-            } else if (panelName.equals("To")) {
+            } else if (panelName.equals(TO)) {
                 switch (convCategory) {
-                    case "length" -> jp = panelCh.LengthPanelFromMeters(panel, bGroup, switchB);
-                    case "temperature" -> jp = panelCh.TempPanelFromCelsius(panel, bGroup, switchB);
-                    case "weight" -> jp = panelCh.WeightPanelFromKG(panel, bGroup, switchB);
-                    case "time" -> jp = panelCh.TimePanelFromSec(panel, bGroup, switchB);
-                    case "volume" -> jp = panelCh.VolumePanelFromLiters(panel, bGroup, switchB);
+                    case LENGTH -> jp = panelCh.LengthPanelFromMeters(panel, bGroup, switchB);
+                    case TEMPERATURE -> jp = panelCh.TempPanelFromCelsius(panel, bGroup, switchB);
+                    case WEIGHT -> jp = panelCh.WeightPanelFromKG(panel, bGroup, switchB);
+                    case TIME -> jp = panelCh.TimePanelFromSec(panel, bGroup, switchB);
+                    case VOLUME -> jp = panelCh.VolumePanelFromLiters(panel, bGroup, switchB);
                 }
             }
-        }else if (source == lengthB) {
-            convCategory = "length";
+        } else if (source == lengthB) {
+            calculator = new LengthCalc();
+            convCategory = LENGTH;
             jp = panelCh.LengthPanelFromMeters(panel, bGroup, switchB);
-        } else if (source == temperatureB){
-            convCategory = "temperature";
+        } else if (source == temperatureB) {
+            calculator = new TemperatureCalc();
+            convCategory = TEMPERATURE;
             jp = panelCh.TempPanelFromCelsius(panel, bGroup, switchB);
         } else if (source == weightB) {
-            convCategory = "weight";
+            calculator = new WeightCalc();
+            convCategory = WEIGHT;
             jp = panelCh.WeightPanelFromKG(panel, bGroup, switchB);
-        } else if (source == timeB){
-            convCategory = "time";
+        } else if (source == timeB) {
+            calculator = new TimeCalc();
+            convCategory = TIME;
             jp = panelCh.TimePanelFromSec(panel, bGroup, switchB);
         } else if (source == volumeB) {
-            convCategory = "volume";
+            calculator = new VolumeCalc();
+            convCategory = VOLUME;
             jp = panelCh.VolumePanelFromLiters(panel, bGroup, switchB);
         }
 

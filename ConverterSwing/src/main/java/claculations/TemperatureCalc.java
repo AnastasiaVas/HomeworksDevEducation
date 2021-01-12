@@ -1,10 +1,85 @@
 package claculations;
 
-public class TemperatureCalc {
-    double receivedValue;
+import utils.Units;
 
-    public TemperatureCalc(double receivedValue){
+public class TemperatureCalc implements ICalculator {
+    double receivedValue;
+    @Override
+    public double valueToStandardUnit(String unitName, double receivedValue) {
         this.receivedValue = receivedValue;
+        double answer = 0;
+        for (Units unit : Units.groupTemperature){
+            if (unit.getName().equals(unitName)){
+                answer = chooseUnitToStandardUnit(unit);
+            }
+        }
+        return answer;
+    }
+
+    @Override
+    public double valueFromStandardUnit(String unitName, double receivedValue) {
+        this.receivedValue = receivedValue;
+        double answer = 0;
+        for (Units unit : Units.groupTemperature){
+            if (unit.getName().equals(unitName)){
+                answer = chooseUnitFromStandardUnit(unit);
+            }
+        }
+        return answer;
+    }
+
+    private double chooseUnitToStandardUnit(Units unit){
+        double answer;
+                switch (unit){
+            case KELVIN_SCALE:
+                answer = toKelvinCalc();
+                break;
+            case ROMER_SCALE:
+                answer = toRomerCalc();
+                break;
+            case FAHRENHEIT_SCALE:
+                answer = toFahrenheitCalc();
+                break;
+            case RANKIN_SCALE:
+                answer = toRankinCalc();
+                break;
+            case NEWTON_SCALE:
+                answer = toNewtoneCalc();
+                break;
+            case DELISLE_SCALE:
+                answer = toDelisleCalc();
+                break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + unit);
+                }
+        return answer;
+    }
+
+    private double chooseUnitFromStandardUnit(Units unit){
+        double answer;
+        switch (unit){
+            case KELVIN_SCALE:
+                answer = fromKelvinCalc();
+                break;
+            case ROMER_SCALE:
+                answer = fromRomerCalc();
+                break;
+            case FAHRENHEIT_SCALE:
+                answer = fromFahrenheitCalc();
+                break;
+            case RANKIN_SCALE:
+                answer = fromRankinCalc();
+                break;
+            case NEWTON_SCALE:
+                answer = fromNewtoneCalc();
+                break;
+            case DELISLE_SCALE:
+                answer = fromDelisleCalc();
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + unit);
+        }
+        return answer;
     }
 
     public double toKelvinCalc(){
