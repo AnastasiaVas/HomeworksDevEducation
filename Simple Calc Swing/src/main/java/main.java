@@ -1,7 +1,5 @@
-import view.CalcInterface;
-
-public class Main {
+public class main {
     public static void main(String args[]) {
-    CalcInterface obj = new CalcInterface();
+    Calculator obj = new Calculator();
 }
 }

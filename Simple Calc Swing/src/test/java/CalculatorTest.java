@@ -4,14 +4,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import view.CalcInterface;
 
 import javax.swing.*;
 
 public class CalculatorTest {
 
     @Mock
-    private CalcInterface calculator = new CalcInterface();
+    private Calculator calculator = new Calculator();
 
     @Mock
     JTextField textF;
@@ -29,7 +28,7 @@ public class CalculatorTest {
     double answer;
 
     @InjectMocks
-    private CalcInterface calc;
+    private Calculator calc;
 
     @BeforeAll
     public void setUp(){
@@ -47,7 +46,7 @@ public class CalculatorTest {
         Mockito.when(textF2.getText()).thenReturn(String.valueOf(returnedMsgTextF2));
         Mockito.when(textF3.getText()).thenReturn(String.valueOf(returnedMsgTextF3));
 
-//        calc.valuesGetter();
+        calc.valuesGetter();
 
         Mockito.verify(textArea, Mockito.only()).setText(String.valueOf(returnedMsg));
     }
