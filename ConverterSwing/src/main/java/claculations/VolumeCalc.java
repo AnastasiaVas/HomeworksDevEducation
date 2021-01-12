@@ -25,5 +25,4 @@ public class VolumeCalc implements ICalculator {
         return answer;
     }
 
-
 }
