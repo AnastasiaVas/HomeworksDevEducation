@@ -81,11 +81,11 @@ function ConvertFromTo(sourceForm, targetForm) {
   if (property[propIndex] == "Temperature") {
     result = parseFloat(result) + tempIncrement[sourceIndex];
   }
-  result = result * sourceFactor;
+  result = result * targetFactor;
 
   // not done yet... now, b) use the targetFactor to convert FROM the base unit
   // to the target unit...
-  result = result / targetFactor;
+  result = result / sourceFactor;
   // Again, handle Temperature increments!
   if (property[propIndex] == "Temperature") {
     result = parseFloat(result) - tempIncrement[targetIndex];
