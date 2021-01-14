@@ -2,3 +2,11 @@
 *.txt
 *.iml
 *.idea
+
+ConverterJavascript/.bowerrc
+
+*.json
+
+ConverterJavascript/Gruntfile.js
+
+ConverterJavascript/gulpfile.js
