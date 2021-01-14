@@ -55,7 +55,6 @@ function CalculateUnit(sourceForm, targetForm) {
 }
 
 function ConvertFromTo(sourceForm, targetForm) {
-  // Converts the contents of the sourceForm input box to the units specified in the targetForm unit menu and puts the result in the targetForm input box.In other words, this is the heart of the whole script...
   var propIndex;
   var sourceIndex;
   var sourceFactor;
@@ -63,30 +62,23 @@ function ConvertFromTo(sourceForm, targetForm) {
   var targetFactor;
   var result;
 
-  // Start by checking which property we are working in...
   propIndex = document.general_form.units.selectedIndex;
 
-  // Let's determine what unit are we converting FROM (i.e. source) and the factor needed to convert that unit to the base unit.
   sourceIndex = sourceForm.unit_menu.selectedIndex;
   sourceFactor = factor[propIndex][sourceIndex];
 
-  // Cool! Let's do the same thing for the target unit - the units we are converting TO:
   targetIndex = targetForm.unit_menu.selectedIndex;
   targetFactor = factor[propIndex][targetIndex];
 
-  // Simple, huh? let's do the math: a) convert the source TO the base unit: (The input has been checked by the CalculateUnit function).
 
   result = sourceForm.value_input.value;
-  // Handle Temperature increments!
   if (property[propIndex] == "Temperature") {
     result = parseFloat(result) + tempIncrement[sourceIndex];
   }
   result = result * targetFactor;
 
-  // not done yet... now, b) use the targetFactor to convert FROM the base unit
-  // to the target unit...
   result = result / sourceFactor;
-  // Again, handle Temperature increments!
+
   if (property[propIndex] == "Temperature") {
     result = parseFloat(result) - tempIncrement[targetIndex];
   }
