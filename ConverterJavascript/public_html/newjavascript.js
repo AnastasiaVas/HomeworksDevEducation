@@ -9,24 +9,25 @@ var unit = new Array();
 var factor = new Array();
 
 property[0] = "Time";
-unit[0] = new Array("Minutes", "Hours", "Days", "Weeks", "Months", "Astronomical Years");
-factor[0] = new Array(1, .3048, 9.806650, .01, 2.54E-02);
+unit[0] = new Array("Seconds", "Minutes", "Hours", "Days", "Weeks", "Months", "Astronomical Years");
+factor[0] = new Array(1, 0.0166667, 0.000277778, 0.0000115741, 1.6534E-6, 3.80517e-7, 31557600);
 
 property[1] = "Weight";
-unit[1] = new Array("Gram", "Carat", "Engligh Pounds", "Pounds", "Stone", "Russian Pounds");
-factor[1] = new Array(1, 4046.856, 100, 1E-28, 10000, 1011.71413184285, .0001, 1000000, 5.067075E-10, 9.290304E-02, 6.4516E-04, 2589988, .8361274);
+unit[1] = new Array("Kilogram", "Gram", "Carat", "Engligh Pounds", "Pounds", "Stone", "Russian Pounds");
+factor[1] = new Array(1, 1000, 5000, 0.3048, 0.3048, 3.28084, 0.157473);
 
 property[2] = "Volume";
-unit[2] = new Array("Cubic Metre", "Gallon", "Pint", "Quart", "Barrel", "Cubic Foot", "Cubic Inch");
-factor[2] = new Array(1, .0000001, 9.806650, .1129848, 1.355818);
+unit[2] = new Array("Litre", "Cubic Metre", "Gallon", "Pint", "Quart", "Barrel", "Cubic Foot", "Cubic Inch");
+factor[2] = new Array(1, 0.001, 0.264172, 2.11338, 1.05669, 0.00628981, 0.0353147, 61.0237);
 
 property[3] = "Length";
-unit[3] = new Array("Kilometers", "Miles", "Nautical Miles", "Cables", "Leagues", "Feet", "Yards");
-factor[3] = new Array(1, 10, 3600, 96521.8999999997, .000000000333564, 96.5219, 9.65219E-02, 9.65219E-05);
+unit[3] = new Array("Meters", "Kilometers", "Miles", "Nautical Miles", "Cables", "Leagues", "Feet", "Yards");
+factor[3] = new Array(1, 1000, 0.000621371, 0.000539957, 0.054, 0.0002071237, 3.28084, 1.09361);
 
 property[4] = "Temperature";
-unit[4] = new Array("Kelvin Scale", "Fahrenheit Scale", "Réaumur Scale", "Remer Scale", "Rankin Scale", "Newtone Scale", "Delisle Scale");
-factor[4] = new Array(1, 1055.87, 1054.35, 4.1868, 4.19002, 4.184, 1.6021E-19, .0000001, 1.355818, 4.214011E-02, 2684077.3, 4186.8, 4190.02, 3600000, 4.2E9, 1, 3600, 1);
+unit[4] = new Array("Celsius Scale", "Fahrenheit Scale", "Kelvin Scale", "Rankin Scale", "Réaumur Scale", "Remer Scale", "Newtone Scale", "Delisle Scale");
+factor[4] = new Array(1, 0.555555555555, 1, 0.555555555555);
+tempIncrement = new Array(0, -32, -273.15, -491.67);
 
 function ChangeUnits(propMenu, unitMenu)
 {
@@ -36,13 +37,62 @@ function ChangeUnits(propMenu, unitMenu)
 }
 
 function FillMenuWithArray(myMenu, myArray) {
-  // Fills the options of myMenu with the elements of myArray.
-  // !CAUTION!: It replaces the elements, so old ones will be deleted.
   var i;
   myMenu.length = myArray.length;
   for (i = 0; i < myArray.length; i++) {
     myMenu.options[i].text = myArray[i];
   }
+}
+
+function CalculateUnit(sourceForm, targetForm) {
+
+  var sourceValue = sourceForm.value_input.value;
+  sourceValue = parseFloat(sourceValue);
+  if (!isNaN(sourceValue) || sourceValue == 0) {
+    sourceForm.value_input.value = sourceValue;
+    ConvertFromTo(sourceForm, targetForm);
+  }
+}
+
+function ConvertFromTo(sourceForm, targetForm) {
+  // Converts the contents of the sourceForm input box to the units specified in the targetForm unit menu and puts the result in the targetForm input box.In other words, this is the heart of the whole script...
+  var propIndex;
+  var sourceIndex;
+  var sourceFactor;
+  var targetIndex;
+  var targetFactor;
+  var result;
+
+  // Start by checking which property we are working in...
+  propIndex = document.general_form.units.selectedIndex;
+
+  // Let's determine what unit are we converting FROM (i.e. source) and the factor needed to convert that unit to the base unit.
+  sourceIndex = sourceForm.unit_menu.selectedIndex;
+  sourceFactor = factor[propIndex][sourceIndex];
+
+  // Cool! Let's do the same thing for the target unit - the units we are converting TO:
+  targetIndex = targetForm.unit_menu.selectedIndex;
+  targetFactor = factor[propIndex][targetIndex];
+
+  // Simple, huh? let's do the math: a) convert the source TO the base unit: (The input has been checked by the CalculateUnit function).
+
+  result = sourceForm.value_input.value;
+  // Handle Temperature increments!
+  if (property[propIndex] == "Temperature") {
+    result = parseFloat(result) + tempIncrement[sourceIndex];
+  }
+  result = result * sourceFactor;
+
+  // not done yet... now, b) use the targetFactor to convert FROM the base unit
+  // to the target unit...
+  result = result / targetFactor;
+  // Again, handle Temperature increments!
+  if (property[propIndex] == "Temperature") {
+    result = parseFloat(result) - tempIncrement[targetIndex];
+  }
+
+  // Ta-da! All that's left is to update the target input box:
+  targetForm.value_input.value = result;
 }
 
 window.onload = function(e) {
