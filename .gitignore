@@ -1,5 +1,12 @@
 *.md
 *.txt
 *.iml
-*.xml
 *.idea
+
+ConverterJavascript/.bowerrc
+
+*.json
+
+ConverterJavascript/Gruntfile.js
+
+ConverterJavascript/gulpfile.js

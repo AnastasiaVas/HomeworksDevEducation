@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <div class="converter-wrapper"><!-- class for CSS-->
+        <h1>UNITS CONVERTER</h1>
+        <label>Choose unit to convert from:</label>
+        <form name="general_form">
+            <span>
+                <select id="units" name="units" onchange="ChangeUnits(this, document.form_A.unit_menu); ChangeUnits(this, document.form_B.unit_menu)">
+                </select>
+            </span>
+        </form>
+    </div>
+    <div class="converter-side-a"><!-- class for CSS-->
+        <form name="form_A">
+            <input type="text" name="value_input" maxlength="20" value="0" onKeyUp="CalculateUnit(document.form_A, document.form_B)">
+            <span>
+                <select name="unit_menu" id="units_to_convert_from" onChange="CalculateUnit(document.form_B, document.form_A)">
+                </select>
+            </span>
+        </form>
+    </div>
+    <div class="converter-side-b"><!-- class for CSS-->
+        <form name="form_B">
+            <input type="text" name="value_input" maxlength="20" value="0" onKeyUp="CalculateUnit(document.form_B, document.form_A)">
+            <span>
+                <select name="unit_menu" id="units_to_convert_to" onChange="CalculateUnit(document.form_A, document.form_B)">
+                </select>
+            </span>
+        </form>
+    </div>
+    <script src="newjavascript.js"></script>
+</html>
