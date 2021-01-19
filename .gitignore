@@ -10,3 +10,5 @@ ConverterJavascript/.bowerrc
 ConverterJavascript/Gruntfile.js
 
 ConverterJavascript/gulpfile.js
+
+*.class
