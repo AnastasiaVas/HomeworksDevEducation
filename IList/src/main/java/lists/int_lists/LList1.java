@@ -1,76 +1,208 @@
 package lists.int_lists;
 
-public class LList1 {
+import java.util.LinkedList;
+import java.util.List;
 
-    private ListElement head;       // указатель на первый элемент
-    private ListElement tail;       // указатель последний элемент
+public class LList1 implements IList {
 
-    void addFront(int data)           //добавить спереди
-    {
-        ListElement a = new ListElement();  //создаём новый элемент
-        a.data = data;              //инициализируем данные.
-        // указатель на следующий элемент автоматически инициализируется как null
-        if(head == null)            //если список пуст
-        {                           //то указываем ссылки начала и конца на новый элемент
-            head = a;               //т.е. список теперь состоит из одного элемента
-            tail = a;
-        }
-        else {
-            a.next = head;          //иначе новый элемент теперь ссылается на "бывший" первый
-            head = a;               //а указатель на первый элемент теперь ссылается на новый элемент
+    public class ListElement {
+        ListElement next;
+        int data;
+
+        public ListElement(int data) {
+            this.data = data;
+            this.next = null;
         }
     }
 
-    void addBack(int data) {          //добавление в конец списка
-        ListElement a = new ListElement();  //создаём новый элемент
-        a.data = data;
-        if (tail == null)           //если список пуст
-        {                           //то указываем ссылки начала и конца на новый элемент
-            head = a;               //т.е. список теперь состоит из одного элемента
-            tail = a;
-        } else {
-            tail.next = a;          //иначе "старый" последний элемент теперь ссылается на новый
-            tail = a;               //а в указатель на последний элемент записываем адрес нового элемента
+    private ListElement head = null;
+    private int capacityCount = 0;
+
+
+
+    @Override
+    public void clear() {
+        for (ListElement x = head; x != null; ) {
+            ListElement next = x.next;
+            x.data = 0;
+            x.next = null;
+            x = next;
         }
+        head = null;
+        capacityCount = 0;
     }
 
-    void printList()                //печать списка
-    {
-        ListElement t = head;       //получаем ссылку на первый элемент
-        while (t != null)           //пока элемент существуе
-        {
-            System.out.print(t.data + " "); //печатаем его данные
-            t = t.next;                     //и переключаемся на следующий
-        }
+    @Override
+    public int size() {
+        return capacityCount;
     }
 
-    void delEl(int data)          //удаление элемента
-    {
-        if(head == null)        //если список пуст -
-            return;             //ничего не делаем
-
-        if (head == tail) {     //если список состоит из одного элемента
-            head = null;        //очищаем указатели начала и конца
-            tail = null;
-            return;             //и выходим
-        }
-
-        if (head.data == data) {    //если первый элемент - тот, что нам нужен
-            head = head.next;       //переключаем указатель начала на второй элемент
-            return;                 //и выходим
-        }
-
-        ListElement t = head;       //иначе начинаем искать
-        while (t.next != null) {    //пока следующий элемент существует
-            if (t.next.data == data) {  //проверяем следующий элемент
-                if(tail == t.next)      //если он последний
-                {
-                    tail = t;           //то переключаем указатель на последний элемент на текущий
-                }
-                t.next = t.next.next;   //найденный элемент выкидываем
-                return;                 //и выходим
+    @Override
+    public int get(int index) {
+        isIndexCorrect(index);
+        int count = 0;
+        ListElement last;
+        last = head;
+        int valueToReturn = 0;
+        while (count <= index) {
+            if (count == index) {
+                valueToReturn = last.data;
+                break;
+            } else {
+                last = last.next;
+                count++;
             }
-            t = t.next;                //иначе ищем дальше
         }
+        return valueToReturn;
+    }
+
+    @Override
+    public boolean add(int value) {
+        capacityCount++;
+        ListElement newListElem = new ListElement(value);
+        newListElem.next = null;
+        ListElement last = head;
+        if (head == null) {
+            head = newListElem;
+        } else {
+            while (last.next != null) {
+                last = last.next;
+            }
+            last.next = newListElem;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean add(int index, int value) {
+        isIndexCorrect(index);
+        capacityCount++;
+        int count = 0;
+        ListElement last;
+        ListElement temp;
+        ListElement newListElem = new ListElement(value);
+        last = head;
+        while (count <= index) {
+            if (count == index - 1) {
+                temp = last.next;
+                last.next = newListElem;
+                newListElem.next = temp;
+                break;
+            } else {
+                last = last.next;
+                count++;
+            }
+        }
+        return true;
+    }
+
+    private void isIndexCorrect(int index) {
+        if (index < 0 || index >= size()) {
+            throw new IndexOutOfBoundsException("Указанный индекс некорректный.");
+        }
+    }
+
+    @Override
+    public int remove(int number) {
+        ListElement prev = null;
+        for (ListElement x = head; x != null; x = x.next) {
+            if (number == x.data) {
+                if (x == head){
+                    head = x.next;
+                } else {
+                    prev.next = x.next;
+                }
+                capacityCount--;
+                return x.data;
+            }
+            prev = x;
+        }
+        return 0;
+    }
+
+    @Override
+    public int removeByIndex(int index) {
+        isIndexCorrect(index);
+        int count = 0;
+        ListElement last;
+        int valueToReturn = 0;
+        last = head;
+        while (count <= index) {
+            if (count == index - 1) {
+                valueToReturn = last.next.data;
+                last.next = last.next.next;
+                capacityCount--;
+                break;
+            } else {
+                last = last.next;
+                count++;
+            }
+        }
+        return valueToReturn;
+    }
+
+
+    @Override
+    public boolean contains(int value) {
+        ListElement le = head;
+        while (le != null){
+            if (le.data == value){
+                return true;
+            }
+            le = le.next;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean set(int index, int value) {
+        isIndexCorrect(index);
+        int count = 0;
+        ListElement last;
+        last = head;
+        while (count <= index) {
+            if (count == index) {
+                last.data = value;
+                break;
+            } else {
+                last = last.next;
+                count++;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void print() {
+        String result = "[";
+        ListElement last = head;
+        for (int i = 0; i < size(); i++) {
+            result += last.data;
+            last = last.next;
+            if (i != size() - 1) {
+                result += ", ";
+            }
+        }
+        result += "]";
+        System.out.println(result);
+    }
+
+    @Override
+    public int[] toArray() {
+        int[] array = new int[size()];
+        ListElement le = head;
+        for (int i = 0; i < size(); i++) {
+            array[i] = le.data;
+            le = le.next;
+        }
+        return array;
+    }
+
+    @Override
+    public boolean removeAll(int[] ar) {
+        for (int i = 0; i < ar.length; i++){
+            remove(ar[i]);
+        }
+        return true;
     }
 }
