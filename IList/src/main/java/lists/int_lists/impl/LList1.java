@@ -24,11 +24,11 @@ public class LList1 implements IList {
 
     @Override
     public void clear() {
-        for (ListElement x = head; x != null; ) {
-            ListElement next = x.next;
-            x.data = 0;
-            x.next = null;
-            x = next;
+        for (ListElement le = head; le != null; ) {
+            ListElement next = le.next;
+            le.data = 0;
+            le.next = null;
+            le = next;
         }
         head = null;
         capacityCount = 0;
@@ -107,17 +107,17 @@ public class LList1 implements IList {
     @Override
     public int remove(int number) {
         ListElement prev = null;
-        for (ListElement x = head; x != null; x = x.next) {
-            if (number == x.data) {
-                if (x == head){
-                    head = x.next;
+        for (ListElement le = head; le != null; le = le.next) {
+            if (number == le.data) {
+                if (le == head){
+                    head = le.next;
                 } else {
-                    prev.next = x.next;
+                    prev.next = le.next;
                 }
                 capacityCount--;
-                return x.data;
+                return le.data;
             }
-            prev = x;
+            prev = le;
         }
         return 0;
     }
