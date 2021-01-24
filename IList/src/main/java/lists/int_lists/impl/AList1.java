@@ -1,28 +1,33 @@
-package lists.generic_lists;
+package lists.int_lists.impl;
+
+import lists.int_lists.IList;
+import utils.Constants;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
-public class AList2<T> implements IListGenerics<T> {
+public class AList1 implements IList {
 
-    int capacityCount;
-    T[] array;
+    private int[] array;
+    private int capacityCount;
     private static final int DEFAULT_CAPACITY = 10;
 
-    public AList2(){
-        array = (T[]) new Object[DEFAULT_CAPACITY];
+    public AList1(){
+        this.array = new int[DEFAULT_CAPACITY];
     }
 
-    public AList2(int capacity){
-        array = (T[]) new Object[capacity];
+    public AList1(int capacity){
+        if (capacity > 0) {
+            this.array = new int[capacity];
+        } else {
+            throw new IllegalArgumentException("Вместимость массива должна быть больше 0.");
+        }
     }
 
-    public AList2(T[] array){
+    public AList1(int[] array){
         this.array = array;
+        capacityCount = array.length+1;
     }
-
-
-
 
     @Override
     public void clear() {
@@ -35,12 +40,12 @@ public class AList2<T> implements IListGenerics<T> {
     }
 
     @Override
-    public T get(int index) {
+    public int get(int index) {
         return array[index];
     }
 
     @Override
-    public boolean add(T value) {
+    public boolean add(int value) {
         if (capacityCount >= array.length) {
             ensureCapacity();
         }
@@ -52,7 +57,7 @@ public class AList2<T> implements IListGenerics<T> {
         int oldCapacity = array.length;
         if (capacityCount >= oldCapacity){
             int newCapacity = (oldCapacity * 3) / 2 + 1;
-            T[] newArray = (T[]) new Object[newCapacity];
+            int[] newArray = new int[newCapacity];
             for (int i = 0; i < oldCapacity; i ++){
                 newArray[i] = array[i];
             }
@@ -61,7 +66,7 @@ public class AList2<T> implements IListGenerics<T> {
     }
 
     @Override
-    public boolean add(int index, T value) {
+    public boolean add(int index, int value) {
         isIndexCorrect(index);
         ensureCapacity();
         for (int i = 0; i < size(); i++){
@@ -75,26 +80,27 @@ public class AList2<T> implements IListGenerics<T> {
 
     private void isIndexCorrect(int index){
         if (index < 0 || index >= array.length){
-            throw new IndexOutOfBoundsException("Указанный индекс некорректный.");
+            throw new IndexOutOfBoundsException(Constants.INCORRECT_INDEX);
         }
     }
 
     @Override
-    public T remove(T value) {
+    public int remove(int number) {
+        int removedValue = 0;
         for (int i = 0; i < array.length; i++){
-            if (array[i] == value){
-                removeByIndex(i);
+            if (array[i] == number){
+                removedValue = removeByIndex(i);
             }
         }
-        return null;
+        return removedValue;
     }
 
     @Override
-    public T removeByIndex(int index) {
+    public int removeByIndex(int index) {
         isIndexCorrect(index);
-        T removedValue = array[index];
+        int removedValue = array[index];
         System.out.println(size());
-        T[] newArray = (T[]) new Object[size()-1];
+        int[] newArray = new int[size()-1];
         for (int i = 0; i < size()-1; i++){
             if (i < index) {
                 newArray[i] = array[i];
@@ -111,7 +117,7 @@ public class AList2<T> implements IListGenerics<T> {
     }
 
     @Override
-    public boolean contains(T value) {
+    public boolean contains(int value) {
         for (int i = 0; i < size(); i++){
             if (array[i] == value){
                 return true;
@@ -121,7 +127,7 @@ public class AList2<T> implements IListGenerics<T> {
     }
 
     @Override
-    public boolean set(int index, T value) {
+    public boolean set(int index, int value) {
         isIndexCorrect(index);
         Array.set(array, index, value);
         return true;
@@ -129,17 +135,20 @@ public class AList2<T> implements IListGenerics<T> {
 
     @Override
     public void print() {
-        String result = "[ ";
+        String result = "[";
         for (int i = 0; i < size(); i++) {
-            result += array[i] + ", ";
+            result += array[i];
+            if (i != size()-1){
+                result += ", ";
+            }
         }
-        result += " ]";
+        result += "]";
         System.out.println(result);
     }
 
     @Override
-    public T[] toArray() {
-        T[] newArray = (T[]) new Object[capacityCount];
+    public int[] toArray() {
+        int[] newArray = new int[capacityCount];
         for (int i = 0; i < capacityCount; i++){
             newArray[i] = array[i];
         }
@@ -147,13 +156,12 @@ public class AList2<T> implements IListGenerics<T> {
     }
 
     @Override
-    public boolean removeAll(T[] ar) {
-        for (T i : ar){
+    public boolean removeAll(int[] ar) {
+        for (int i : ar){
             if (contains(i)){
                 remove(i);
             }
         }
         return true;
     }
-
 }

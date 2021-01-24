@@ -1,12 +1,16 @@
-package lists.int_lists;
+package lists.int_lists.impl;
+
+import lists.int_lists.IList;
+import utils.Constants;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class LList1 implements IList {
 
-    public class ListElement {
+    class ListElement {
         ListElement next;
+
         int data;
 
         public ListElement(int data) {
@@ -17,8 +21,6 @@ public class LList1 implements IList {
 
     private ListElement head = null;
     private int capacityCount = 0;
-
-
 
     @Override
     public void clear() {
@@ -98,7 +100,7 @@ public class LList1 implements IList {
 
     private void isIndexCorrect(int index) {
         if (index < 0 || index >= size()) {
-            throw new IndexOutOfBoundsException("Указанный индекс некорректный.");
+            throw new IndexOutOfBoundsException(Constants.INCORRECT_INDEX);
         }
     }
 
