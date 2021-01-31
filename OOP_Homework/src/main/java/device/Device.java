@@ -1,3 +1,5 @@
+package device;
+import memory.Memory;
 import processor.Processor;
 
 public class Device {
@@ -40,6 +42,14 @@ public class Device {
     }
 
     public String getSystemInfo(){
-        return String.format(processor.getDetails() + " Memory capacity is %s and occupied memory space is %s", memoryInfo.getMemoryCapacity(), memoryInfo.getOccupiedMemory());
+        return String.format(processor.getDetails() + " memory.Memory capacity is %s and occupied memory space is %s", memoryInfo.getMemoryCapacity(), memoryInfo.getOccupiedMemory());
+    }
+
+    public Processor getProcessor() {
+        return processor;
+    }
+
+    public Memory.MemoryInfo getMemoryInfo() {
+        return memoryInfo;
     }
 }

@@ -1,4 +1,4 @@
-package main;
+package filter;
 
 import device.Device;
 import memory.Memory;

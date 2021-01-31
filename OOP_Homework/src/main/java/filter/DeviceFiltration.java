@@ -1,12 +1,10 @@
-package main;
+package filter;
 
 import device.Device;
 import device.comparators.DeviceArchComparator;
+import device.comparators.DeviceMemoryCapComparator;
 import device.comparators.DeviceProcessorParamComparator;
-import memory.Memory;
-import processor.Processor;
-import processor.ProcessorArm;
-import processor.ProcessorX86;
+import device.comparators.DeviceUsedMemoryComparator;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -22,6 +20,16 @@ public class DeviceFiltration {
     public ArrayList<Device> compareByProcessorParam(ArrayList<Device> deviceList, Device device){
         DeviceProcessorParamComparator devicePPC = new DeviceProcessorParamComparator();
         return compareInner(deviceList, device, devicePPC);
+    }
+
+    public ArrayList<Device> compareByMemoryCap(ArrayList<Device> deviceList, Device device){
+        DeviceMemoryCapComparator deviceMemoryCapComparator = new DeviceMemoryCapComparator();
+        return compareInner(deviceList, device, deviceMemoryCapComparator);
+    }
+
+    public ArrayList<Device> compareByUsedMemory(ArrayList<Device> deviceList, Device device){
+        DeviceUsedMemoryComparator deviceUsedMemoryComparator = new DeviceUsedMemoryComparator();
+        return compareInner(deviceList, device, deviceUsedMemoryComparator);
     }
 
     private ArrayList<Device> compareInner(ArrayList<Device> deviceList, Device device, Comparator<Device> comparator){
