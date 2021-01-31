@@ -1,7 +1,5 @@
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import memory.Memory;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -21,6 +19,17 @@ public class ProcessorTest {
 
     @Nested
     class ProcessorConstructorTest{
+
+        @Test public void processorConstructorTest() {
+            try {
+                new ProcessorArm(1, "L1", (byte)64);
+                new ProcessorX86(8.723F, "L3", (byte)4);
+                new ProcessorArm(4.4F, "L2", (byte)32);
+                new ProcessorX86(2.3F, "L3", (byte)16);
+            } catch (Exception e) {
+                Assertions.fail(e.getMessage());
+            }
+        }
 
         @Test
         public void processorConstructorTest_FREQUENCY() {
@@ -90,6 +99,68 @@ public class ProcessorTest {
         void getDetailsTest(Processor processor, String expected){
             String actual = processor.getDetails();
             assertEquals(actual, expected);
+        }
+    }
+
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    @Nested
+    class DataProcessTest{
+
+        @BeforeAll
+        void variablesInitialization(){
+            processor1 =  new ProcessorArm(3.2F, "L1", (byte) 64);
+            processor2 = new ProcessorX86(2F, "L3", (byte) 32);
+        }
+
+        private Stream<Arguments> dataProcessLongTestArgs() {
+            return Stream.of(
+                    Arguments.of(processor1, 19034, 19037),
+                    Arguments.of(processor2, 19034, 19031),
+                    Arguments.of(processor1, 0, 3),
+                    Arguments.of(processor2, 0, -3),
+                    Arguments.of(processor1, -10, -7),
+                    Arguments.of(processor2, -10, -13)
+            );
+        }
+
+        private Stream<Arguments> dataProcessStringTestArgs() {
+            return Stream.of(
+                    Arguments.of(processor1, "House", "HouseA"),
+                    Arguments.of(processor2, "House", "HouseB"),
+                    Arguments.of(processor1, "a", "aA"),
+                    Arguments.of(processor2, "b", "bB"),
+                    Arguments.of(processor1, "", "A"),
+                    Arguments.of(processor2, "", "B")
+            );
+        }
+
+        private Stream<Arguments> dataProcessExceptionTestArgs() {
+            return Stream.of(
+                    Arguments.of(processor1, null),
+                    Arguments.of(processor2, null)
+            );
+        }
+
+        @ParameterizedTest
+        @MethodSource("dataProcessLongTestArgs")
+        void dataProcessLongTest(Processor processor, long input, long expected){
+            long actual = processor.dataProcess(input);
+            assertEquals(actual, expected);
+        }
+
+        @ParameterizedTest
+        @MethodSource("dataProcessStringTestArgs")
+        void dataProcessStringTest(Processor processor, String input, String expected){
+            String actual = processor.dataProcess(input);
+            assertEquals(actual, expected);
+        }
+
+        @ParameterizedTest
+        @MethodSource("dataProcessExceptionTestArgs")
+        void dataProcessExceptionTest(Processor processor, String input){
+            Assertions.assertThrows(NullPointerException.class, () -> {
+                processor.dataProcess(input);
+            });
         }
     }
 }

@@ -11,6 +11,9 @@ public class ProcessorX86 extends  Processor{
 
     @Override
     public String dataProcess(String data) {
+        if (data == null){
+            throw new NullPointerException("Provided string hasn't been initialized.");
+        }
         return data + "B";
     }
 

@@ -47,13 +47,14 @@ public class Memory {
         try {
             int lastElemInd = getLast();
             if (lastElemInd != -1) {
-                memoryCell[lastElemInd] = str;
-                return true;
+                memoryCell[lastElemInd+1] = str;
+            } else {
+                memoryCell[0] = str;
             }
+            return true;
         } catch (NullPointerException e) {
             return false;
         }
-        return false;
     }
 
     public MemoryInfo getMemoryInfo() {
@@ -67,9 +68,9 @@ public class Memory {
         return new MemoryInfo(length, (double) count / length);
     }
 
-    public class MemoryInfo {
-        private int memoryCapacity;
-        private double occupiedMemory;
+    public static class MemoryInfo {
+        private final int memoryCapacity;
+        private final double occupiedMemory;
 
         public int getMemoryCapacity() {
             return memoryCapacity;

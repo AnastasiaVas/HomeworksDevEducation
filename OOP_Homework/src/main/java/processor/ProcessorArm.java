@@ -11,6 +11,9 @@ public class ProcessorArm extends Processor {
 
     @Override
     public String dataProcess(String data) {
+        if (data == null){
+            throw new NullPointerException("Provided string hasn't been initialized.");
+        }
        return data + "A";
     }
 

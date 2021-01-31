@@ -22,7 +22,7 @@ public class Device {
     }
 
     public String[] readAll() {
-        int cellsOccupied = memoryInfo.getOccupiedMemory() * memoryInfo.getMemoryCapacity();
+        int cellsOccupied = (int) memoryInfo.getOccupiedMemory() * memoryInfo.getMemoryCapacity();
         String[] resultArray = new String[cellsOccupied];
         for (int i = 0; i < cellsOccupied; i++) {
             try {
