@@ -5,6 +5,9 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import processor.Processor;
+import processor.ProcessorArm;
+import processor.ProcessorX86;
 
 import java.util.stream.Stream;
 
@@ -77,8 +80,8 @@ public class ProcessorTest {
 
       private Stream<Arguments> getDetailsArgs() {
           return Stream.of(
-                  Arguments.of(processor1, "Processor details are as follows: frequency 3.2 GHz, cache L1, bit capacity 64 bits"),
-                  Arguments.of(processor2, "Processor details are as follows: frequency 2.0 GHz, cache L3, bit capacity 32 bits")
+                  Arguments.of(processor1, "processor.Processor details are as follows: frequency 3.2 GHz, cache L1, bit capacity 64 bits"),
+                  Arguments.of(processor2, "processor.Processor details are as follows: frequency 2.0 GHz, cache L3, bit capacity 32 bits")
           );
       }
 

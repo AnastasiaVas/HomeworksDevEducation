@@ -1,7 +1,10 @@
+package processor;
+
 public abstract class Processor {
     float frequency;
     String cache;
     byte bitCapacity;
+    protected String architecture;
 
     public Processor(float frequency, String cache, byte bitCapacity) {
         if (frequency >= 1 && frequency <= 8.723) {
@@ -22,10 +25,26 @@ public abstract class Processor {
     }
 
     public String getDetails(){
-        return String.format("Processor details are as follows: frequency %s GHz, cache %s, bit capacity %s bits", frequency, cache, bitCapacity);
+        return String.format("processor.Processor details are as follows: frequency %s GHz, cache %s, bit capacity %s bits", frequency, cache, bitCapacity);
     }
 
     public abstract String dataProcess(String data);
 
     public abstract long dataProcess(long data);
+
+    public String getArchitecture(){
+        return architecture;
+    }
+
+    public float getFrequency() {
+        return frequency;
+    }
+
+    public String getCache() {
+        return cache;
+    }
+
+    public byte getBitCapacity() {
+        return bitCapacity;
+    }
 }

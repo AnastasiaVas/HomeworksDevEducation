@@ -1,7 +1,12 @@
+package processor;
+
 public class ProcessorArm extends Processor {
+
+    public final String architecture = "ARM";
 
     public ProcessorArm(float frequency, String cache, byte bitCapacity) {
         super(frequency, cache, bitCapacity);
+        super.architecture = this.architecture;
     }
 
     @Override

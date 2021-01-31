@@ -1,7 +1,12 @@
+package processor;
+
 public class ProcessorX86 extends  Processor{
+
+    public final String architecture = "X86";
 
     public ProcessorX86(float frequency, String cache, byte bitCapacity) {
         super(frequency, cache, bitCapacity);
+        super.architecture = this.architecture;
     }
 
     @Override

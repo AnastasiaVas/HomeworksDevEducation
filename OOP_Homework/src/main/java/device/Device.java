@@ -1,3 +1,5 @@
+import processor.Processor;
+
 public class Device {
 
     Processor processor;
@@ -12,17 +14,17 @@ public class Device {
     public void save(String[] data) {
         for (String str : data) {
             if (!memory.save(str)) {
-                throw new OutOfMemoryError("Not enough memory to save" + str);
+                throw new OutOfMemoryError("Not enough memory to save " + str);
             }
         }
     }
 
     public String[] readAll() {
-        int cellsOccupied = (int) (memoryInfo.getOccupiedMemory() * memoryInfo.getMemoryCapacity());
+        int cellsOccupied = memoryInfo.getOccupiedMemory() * memoryInfo.getMemoryCapacity();
         String[] resultArray = new String[cellsOccupied];
         for (int i = 0; i < cellsOccupied; i++) {
             try {
-                resultArray[i] = memory.readLast();
+                resultArray[i] = memory.removeLast();
             } catch (NullPointerException e) {
                 break;
             }
@@ -31,8 +33,9 @@ public class Device {
     }
 
     public void dataProcessing(){
-        for (String str : readAll()) {
-            processor.dataProcess(str);
+        String[] resultArray = readAll();
+        for (String str : resultArray) {
+            memory.save(processor.dataProcess(str));
         }
     }
 
