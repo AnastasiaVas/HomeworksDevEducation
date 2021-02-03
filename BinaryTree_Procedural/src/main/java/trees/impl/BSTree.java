@@ -3,8 +3,6 @@ package trees.impl;
 import trees.ITree;
 import util.Constants;
 
-import java.util.Arrays;
-
 public class BSTree implements ITree {
 
     class Node {
