@@ -1,6 +1,7 @@
 package trees.impl;
 
 import trees.ITree;
+import util.Constants;
 
 import java.util.Arrays;
 
@@ -87,7 +88,7 @@ public class BSTree implements ITree {
 
     private int delInternal(Node node, int val) {
         if (node == null) {
-            throw new NullPointerException("Значение не было найдено.");
+            throw new NullPointerException(Constants.NOT_FOUND);
         }
         if (node.value == val) {
             return node.value;
