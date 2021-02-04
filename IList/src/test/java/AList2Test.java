@@ -1,4 +1,16 @@
-public class AList1Test {
+import lists.int_lists.impl.LList2;
+import org.junit.jupiter.api.Test;
+
+public class AList2Test {
+
+  //  LList2 lList2 = new LList2();
+
+ //   @Test
+ //   public void List2PrintTest(){
+ //       lList2.add(8);
+ //       lList2.add(10);
+ //       lList2.print();
+ //   }
     //    int[] array = {5, 12, 15, -8, 6};
   //  static IList collection1;
   //  static IList collection2;

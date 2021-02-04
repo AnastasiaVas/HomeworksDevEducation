@@ -39,12 +39,12 @@ public class LList2 implements IList {
 
     @Override
     public void clear() {
-        for (ListElement x = head; x != null; ) {
-            ListElement next = x.next;
-            x.data = 0;
-            x.next = null;
-            x.prev = null;
-            x = next;
+        for (ListElement le = head; le != null; ) {
+            ListElement next = le.next;
+            le.data = 0;
+            le.next = null;
+            le.prev = null;
+            le = next;
         }
         head = tail = null;
         capacityCount = 0;
@@ -151,24 +151,24 @@ public class LList2 implements IList {
     public boolean set(int index, int value) {
         isIndexCorrect(index);
         ListElement le = findElem(index);
-        int oldVal = le.data;
         le.data = value;
         return true;
     }
 
     @Override
     public void print() {
-        String result = "[";
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
         ListElement last = head;
         for (int i = 0; i < size(); i++) {
-            result += last.data;
+            builder.append(last.data);
             last = last.next;
             if (i != size() - 1) {
-                result += ", ";
+                builder.append(", ");
             }
         }
-        result += "]";
-        System.out.println(result);
+        builder.append("]");
+        System.out.println(builder);
     }
 
     @Override
