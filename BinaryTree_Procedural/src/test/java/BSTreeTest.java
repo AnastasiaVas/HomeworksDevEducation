@@ -144,4 +144,34 @@ public class BSTreeTest {
             assertArrayEquals(expected, actual);
         }
     }
+
+    @Nested
+    class DeleteTest{
+
+    }
+
+    @Nested
+    class GetWidthTest{
+
+    }
+
+    @Nested
+    class GetHeightTest {
+
+    }
+
+    @Nested
+    class NodesTest {
+
+    }
+
+    @Nested
+    class LeavesTest {
+
+    }
+
+    @Nested
+    class ReverseTest {
+
+    }
 }
