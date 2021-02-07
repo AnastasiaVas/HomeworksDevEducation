@@ -3,12 +3,14 @@ package trees.impl;
 import trees.ITree;
 import util.Constants;
 
-public class BSTree implements ITree {
+import java.util.*;
 
-    class Node {
+public class BSTreeRecursive implements ITree {
+
+    public class Node {
         public int value;
-        Node left;
-        Node right;
+        public Node left;
+        public Node right;
 
         public Node(int value) {
             this.value = value;
@@ -58,6 +60,9 @@ public class BSTree implements ITree {
     @Override
     public int[] toArray() {
         int[] array = new int[size()];
+        if (root == null){
+            return array;
+        }
         int i = 0;
         sortArray(root, array, i);
         return array;
@@ -79,40 +84,82 @@ public class BSTree implements ITree {
         root = addInternal(root, val);
     }
 
-    @Override
-    public void del(int val) {
-        System.out.println(delInternal(root, val));
+    private Node addInternal(Node currentNode, int value) {
+        if (currentNode == null) {
+            return new Node(value);
+        }
+
+        if (value < currentNode.value) {
+            currentNode.left = addInternal(currentNode.left, value);
+        } else if (value > currentNode.value) {
+            currentNode.right = addInternal(currentNode.right, value);
+        }
+        return currentNode;
     }
 
-    private int delInternal(Node node, int val) {
-        if (node == null) {
-            throw new NullPointerException(Constants.NOT_FOUND);
-        }
-        if (node.value == val) {
-            return node.value;
-        }
-        if (val < node.value) {
-            return delInternal(node.left, val);
-        } else {
-            return delInternal(node.right, val);
-        }
+    @Override
+    public void del(int val) {
+        delInternal(root, val);
     }
+
+    private Node delInternal(Node node, int value) {
+        if(node == null) return node;
+        if(value > node.value){
+            node.right = delInternal(node.right, value);
+        }else if(value < node.value){
+            node.left = delInternal(node.left, value);
+        }else{
+            if(node.left == null && node.right == null){
+                node = null;
+            }else if(node.right != null){
+
+                node.value = successor(node);
+                node.right = delInternal(node.right, node.value);
+            }else{
+                node.value = predecessor(node);
+                node.left = delInternal(node.left, node.value);
+            }
+        }
+        return root;
+    }
+
+    private int successor(Node node){
+        node = node.right;
+        while(node.left != null){
+            node = node.left;
+        }
+        return node.value;
+    }
+
+    private int predecessor(Node node){
+        node = node.left;
+        while(node.right != null){
+            node = node.right;
+        }
+        return node.value;
+    }
+
 
     @Override
     public int getWidth() {
-        return widthInternal(root, 0);
+        if (root == null){
+            return 0;
+        }
+        int level = 1;
+        Map<Integer, Integer> map = new HashMap<>();
+        widthInternal(root, level, map);
+        return map.values().stream().max(Comparator.naturalOrder()).get();
     }
 
-    private int widthInternal(Node node, int size) {
-        if (node != null) {
-            if (node.value <= root.value) {
-                size = widthInternal(node.left, size);
-            }
-            if (node.value >= root.value) {
-                size = widthInternal(node.right, size);
-            }
+    private void widthInternal(Node node, int level, Map<Integer, Integer> map) {
+        if (node == null){
+            return;
         }
-        return ++size;
+
+        map.put(level, map.getOrDefault(level, 0) + 1);
+
+        widthInternal(node.left, level + 1, map);
+        widthInternal(node.right, level + 1, map);
     }
 
     @Override
@@ -177,22 +224,5 @@ public class BSTree implements ITree {
             reverseInternal(currentNode.left);
             reverseInternal(currentNode.right);
         }
-    }
-
-
-    private Node addInternal(Node currentNode, int value) {
-        if (currentNode == null) {
-            return new Node(value);
-        }
-
-        if (value < currentNode.value) {
-            currentNode.left = addInternal(currentNode.left, value);
-        } else if (value > currentNode.value) {
-            currentNode.right = addInternal(currentNode.right, value);
-        } else {
-            return currentNode;
-        }
-
-        return currentNode;
     }
 }
