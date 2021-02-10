@@ -5,7 +5,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import trees.impl.BSTreeProcedural;
 import trees.impl.BSTreeRecursive;
 
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -117,8 +116,8 @@ public class BSTreeProceduralTest {
 
         @ParameterizedTest
         @MethodSource("addMultipleValTestArgs")
-        void addMultipleValTest(BSTreeRecursive bsTreeRecursive, int expected){
-            int actual = bsTreeRecursive.size();
+        void addMultipleValTest(BSTreeProcedural bsTreeProcedural, int expected){
+            int actual = bsTreeProcedural.size();
             assertEquals(expected, actual);
         }
     }
@@ -127,37 +126,18 @@ public class BSTreeProceduralTest {
     @Nested
     class ToArrayTest{
 
-        ToArrayTest(){
-            BSTreeRecursive bsTreeR1 = new BSTreeRecursive();
-            bsTreeR1.root = bsTreeR1.new Node(2);
-            bsTreeR1.root.left = bsTreeR1.new Node(1);
-            bsTreeR1.root.right = bsTreeR1.new Node(3);
-
-            BSTreeRecursive bsTreeR2 = new BSTreeRecursive();
-            bsTreeR2.root = bsTreeR2.new Node(80);
-            bsTreeR2.root.left = bsTreeR2.new Node(70);
-            bsTreeR2.root.left.left = bsTreeR2.new Node(50);
-            bsTreeR2.root.left.left.right = bsTreeR2.new Node(55);
-            bsTreeR2.root.left.right = bsTreeR2.new Node(72);
-            bsTreeR2.root.left.right.left = bsTreeR2.new Node(71);
-            bsTreeR2.root.left.right.right = bsTreeR2.new Node(75);
-            bsTreeR2.root.right = bsTreeR2.new Node(85);
-
-            BSTreeRecursive bsTreeR3 = new BSTreeRecursive();
-        }
-
         public Stream<Arguments> toArrayTestArgs(){
             return Stream.of(
-                    arguments(bsTreeP2, new int[]{55, 50, 71, 75, 72, 70, 85, 80}),
+                    arguments(bsTreeP2, new int[]{50, 55, 70, 71, 72, 75, 80, 85}),
                     arguments(bsTreeP3, new int[0])
             );
         }
 
         @ParameterizedTest
         @MethodSource("toArrayTestArgs")
-        void toArrayTest(BSTreeRecursive bsTreeRecursive, int[] expected){
-            int[] actual = bsTreeRecursive.toArray();
-            System.out.println("Actual array is " + Arrays.toString(actual));
+        void toArrayTest(BSTreeProcedural bsTreeProcedural, int[] expected){
+            int[] actual = bsTreeProcedural.toArray();
+        //    System.out.println("Actual array is " + Arrays.toString(actual));
             assertArrayEquals(expected, actual);
         }
     }
@@ -186,7 +166,7 @@ public class BSTreeProceduralTest {
 
         @Test
         void deleteRootTest() {
-            bsTreeP3.del(2);
+            bsTreeP1.del(2);
             int expected = 3;
             int actual = bsTreeP1.root.value;
             assertEquals(expected, actual);

@@ -103,31 +103,18 @@ public class BSTreeRecursive implements ITree {
     }
 
     private Node delInternal(Node node, int value) {
-        /* Base Case: If the tree is empty */
         if (node == null)
             return node;
-
-        /* Otherwise, recur down the tree */
         if (value < node.value)
             node.left = delInternal(node.left, value);
         else if (value > node.value)
             node.right = delInternal(node.right, value);
-
-            // if key is same as root's
-            // key, then This is the
-            // node to be deleted
         else {
-            // node with only one child or no child
             if (node.left == null)
                 return node.right;
             else if (node.right == null)
                 return node.left;
-
-            // node with two children: Get the inorder
-            // successor (smallest in the right subtree)
             node.value = minValue(node.right);
-
-            // Delete the inorder successor
             node.right = delInternal(node.right, node.value);
         }
 
@@ -143,22 +130,6 @@ public class BSTreeRecursive implements ITree {
             node = node.left;
         }
         return minv;
-    }
-
-    private int successor(Node node){
-        node = node.right;
-        while(node.left != null){
-            node = node.left;
-        }
-        return node.value;
-    }
-
-    private int predecessor(Node node){
-        node = node.left;
-        while(node.right != null){
-            node = node.right;
-        }
-        return node.value;
     }
 
 

@@ -117,26 +117,20 @@ public class BSTreeProcedural implements ITree {
         Node newNode = new Node(val);
         if (root == null)
             root = newNode;
-        else
-        {
+        else {
             Node current = root;
             Node parent;
-            while (true)
-            {
+            while (true) {
                 parent = current;
-                if (val < current.value)
-                {
+                if (val < current.value) {
                     current = current.left;
-                    if (current == null)
-                    {
+                    if (current == null) {
                         parent.left = newNode;
                         return;
                     }
-                } else
-                {
+                } else {
                     current = current.right;
-                    if (current == null)
-                    {
+                    if (current == null) {
                         parent.right = newNode;
                         return;
                     }
@@ -147,48 +141,65 @@ public class BSTreeProcedural implements ITree {
 
     @Override
     public void del(int val) {
-        Node[] nodeArr = new Node[2];
-        nodeArr = findNodes(root, val, nodeArr);
-        delInternal(nodeArr[0], nodeArr[1]);
-    }
-
-    private void delInternal(Node node, Node parent) {
-        if (node.left == null && node.right == null) {
-            parent.left = null;
-            parent.right = null;
-        } else if (node.right == null) {
-            if (node == root) {
-                root = node.left;
-            } else if (node == parent.left) {
-                parent.left = node.left;
+        if (root == null){
+            throw new IllegalArgumentException(Constants.NOT_FOUND);
+        }
+        Node current = root;
+        Node parent = root;
+        boolean isLeft = true;
+        while (current.value != val)
+        {
+            parent = current;
+            if (val < current.value)
+            {
+                if (current.left == null){
+                    throw new IllegalArgumentException(Constants.NOT_FOUND);
+                }
+                isLeft = true;
+                current = current.left;
             } else {
-                parent.right = node.left;
+                if (current.right == null){
+                    throw new IllegalArgumentException(Constants.NOT_FOUND);
+                }
+                isLeft = false;
+                current = current.right;
             }
-        } else if (node.left == null) {
-            if (node == root) {
-                root = node.right;
-            } else if (node == parent.left) {
-                parent.left = node.right;
-            } else {
-                parent.right = node.right;
+        }
+        if (current.left == null && current.right == null) {
+            if (current == root)
+                root = null;
+            else if (isLeft) {
+                parent.left = null;
             }
-        } else {
-
-            twoChildren(node, parent);
+            else {
+                parent.right = null;
+            }
+        }
+        else if (current.right == null)
+            if (current == root)
+                root = current.left;
+            else if (isLeft)
+                parent.left = current.left;
+            else
+                parent.right = current.left;
+        else if (current.left == null)
+            if (current == root)
+                root = current.right;
+            else if (isLeft)
+                parent.left = current.right;
+            else
+                parent.right = current.right;
+        else {
+            Node successor = getSuccessor(current);
+            if (current == root) {
+                root = successor;
+            } else if (isLeft) {
+                parent.left = successor;
+            } else
+                parent.right = successor;
         }
     }
 
-    private void twoChildren(Node node, Node parent) {
-        Node successor = getSuccessor(node);
-
-        if (node == root) {
-            root = successor;
-        } else if (node == parent.left) {
-            parent.left = successor;
-        } else {
-            parent.right = successor;
-        }
-    }
 
     private Node getSuccessor(Node node) {
         Node successorParent = node;
@@ -204,27 +215,6 @@ public class BSTreeProcedural implements ITree {
         successor.right = node.right;
         return successor;
 
-    }
-
-    public Node[] findNodes(Node node, int val, Node[] nodeArr) {
-        if (node == null) {
-            throw new IllegalArgumentException(Constants.NOT_FOUND);
-        }
-        if (node.value == val) {
-            if (node == root) {
-                nodeArr[0] = root;
-                nodeArr[1] = root;
-            } else {
-                nodeArr[1] = node;
-            }
-            return nodeArr;
-        }
-        nodeArr[0] = node;
-        if (val < node.value) {
-            return findNodes(node.left, val, nodeArr);
-        } else {
-            return findNodes(node.right, val, nodeArr);
-        }
     }
 
     @Override
@@ -252,11 +242,10 @@ public class BSTreeProcedural implements ITree {
 
     @Override
     public int getHeight() {
-        // Base Case
         if (root == null)
             return 0;
 
-        Queue<Node> nodeQueue = new LinkedList();
+        Queue<Node> nodeQueue = new LinkedList<>();
         nodeQueue.add(root);
         int height = 0;
 
@@ -268,6 +257,7 @@ public class BSTreeProcedural implements ITree {
             while (nodeCount > 0) {
                 Node newNode = nodeQueue.peek();
                 nodeQueue.remove();
+                assert newNode != null;
                 if (newNode.left != null)
                     nodeQueue.add(newNode.left);
                 if (newNode.right != null)
@@ -307,7 +297,7 @@ public class BSTreeProcedural implements ITree {
     @Override
     public int leaves() {
         Queue<Node> queue = new LinkedList<>();
-        if (root == null){
+        if (root == null) {
             return 0;
         }
         queue.add(root);
@@ -331,8 +321,7 @@ public class BSTreeProcedural implements ITree {
         }
         Queue<Node> nodeQueue = new ArrayDeque<>();
         nodeQueue.add(root);
-        while (!nodeQueue.isEmpty())
-        {
+        while (!nodeQueue.isEmpty()) {
             Node curr = nodeQueue.poll();
             swapNodes(curr);
             if (curr.left != null) {
@@ -344,8 +333,7 @@ public class BSTreeProcedural implements ITree {
         }
     }
 
-    private void swapNodes(Node node)
-    {
+    private void swapNodes(Node node) {
         if (node == null) {
             return;
         }
