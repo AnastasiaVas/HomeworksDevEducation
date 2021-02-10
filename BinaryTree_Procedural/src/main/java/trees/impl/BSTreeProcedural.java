@@ -39,28 +39,14 @@ public class BSTreeProcedural implements ITree {
 
         Stack<Node> nodeStack = new Stack<>();
         Node currNode = root;
-
-        // traverse the tree
         while (currNode != null || nodeStack.size() > 0) {
-
-            /* Reach the left most Node of the
-            curr Node */
             while (currNode != null) {
-                /* place pointer to a tree node on
-                   the stack before traversing
-                  the node's left subtree */
                 nodeStack.push(currNode);
                 currNode = currNode.left;
             }
-
-            /* Current must be NULL at this point */
             currNode = nodeStack.pop();
-
             System.out.print(currNode.value + " ");
 
-            /* we have visited the node and its
-               left subtree.  Now, it's right
-               subtree's turn */
             currNode = currNode.right;
         }
     }
@@ -76,29 +62,19 @@ public class BSTreeProcedural implements ITree {
             return 0;
         }
 
-        // Using level order Traversal.
         Queue<Node> nodeQueue = new LinkedList<>();
         nodeQueue.offer(root);
-
         int count = 1;
         while (!nodeQueue.isEmpty()) {
             Node temp = nodeQueue.poll();
 
-            // when the queue is empty:
-            // the poll() method returns null.
             if (temp != null) {
                 if (temp.left != null) {
-                    // Increment count
                     count++;
-
-                    // Enqueue left child
                     nodeQueue.offer(temp.left);
                 }
                 if (temp.right != null) {
-                    // Increment count
                     count++;
-
-                    // Enqueue left child
                     nodeQueue.offer(temp.right);
                 }
             }
@@ -119,27 +95,17 @@ public class BSTreeProcedural implements ITree {
         Stack<Node> nodeStack = new Stack<>();
         Node currNode = root;
         int i = 0;
-        // traverse the tree
         while (currNode != null || nodeStack.size() > 0) {
 
-            /* Reach the left most Node of the
-            curr Node */
             while (currNode != null) {
-                /* place pointer to a tree node on
-                   the stack before traversing
-                  the node's left subtree */
                 nodeStack.push(currNode);
                 currNode = currNode.left;
             }
 
-            /* Current must be NULL at this point */
             currNode = nodeStack.pop();
 
             nodeArray[i] = currNode.value;
             i++;
-            /* we have visited the node and its
-               left subtree.  Now, it's right
-               subtree's turn */
             currNode = currNode.right;
         }
         return nodeArray;
@@ -148,29 +114,29 @@ public class BSTreeProcedural implements ITree {
     @Override
     public void add(int val) {
 
-        Node newNode = new Node(val); // Создание нового узла
-        if (root == null) // Корневой узел не существует
+        Node newNode = new Node(val);
+        if (root == null)
             root = newNode;
-        else // Корневой узел занят
+        else
         {
-            Node current = root; // Начать с корневого узла
+            Node current = root;
             Node parent;
-            while (true) // (внутренний выход из цикла)
+            while (true)
             {
                 parent = current;
-                if (val < current.value) // Двигаться налево?
+                if (val < current.value)
                 {
                     current = current.left;
-                    if (current == null) // Если достигнут конец цепочки,
-                    { // вставить слева
+                    if (current == null)
+                    {
                         parent.left = newNode;
                         return;
                     }
-                } else // Или направо?
+                } else
                 {
                     current = current.right;
-                    if (current == null) // Если достигнут конец цепочки,
-                    { // вставить справа
+                    if (current == null)
+                    {
                         parent.right = newNode;
                         return;
                     }
@@ -290,23 +256,15 @@ public class BSTreeProcedural implements ITree {
         if (root == null)
             return 0;
 
-        // Create an empty queue for level order tarversal
         Queue<Node> nodeQueue = new LinkedList();
-
-        // Enqueue Root and initialize height
         nodeQueue.add(root);
         int height = 0;
 
         while (true) {
-            // nodeCount (queue size) indicates number of nodes
-            // at current lelvel.
             int nodeCount = nodeQueue.size();
             if (nodeCount == 0)
                 return height;
             height++;
-
-            // Dequeue all nodes of current level and Enqueue all
-            // nodes of next level
             while (nodeCount > 0) {
                 Node newNode = nodeQueue.peek();
                 nodeQueue.remove();
@@ -325,29 +283,19 @@ public class BSTreeProcedural implements ITree {
             return 0;
         }
 
-        // Using level order Traversal.
         Queue<Node> nodeQueue = new LinkedList<>();
         nodeQueue.offer(root);
 
         int count = 1;
         while (!nodeQueue.isEmpty()) {
             Node temp = nodeQueue.poll();
-
-            // when the queue is empty:
-            // the poll() method returns null.
             if (temp != null) {
                 if (temp.left != null && (temp.left.left != null || temp.left.right != null)) {
-                    // Increment count
                     count++;
-
-                    // Enqueue left child
                     nodeQueue.offer(temp.left);
                 }
                 if (temp.right != null && (temp.right.left != null || temp.right.right != null)) {
-                    // Increment count
                     count++;
-
-                    // Enqueue left child
                     nodeQueue.offer(temp.right);
                 }
             }
@@ -378,30 +326,18 @@ public class BSTreeProcedural implements ITree {
 
     @Override
     public void reverse() {
-        // base case: if the tree is empty
         if (root == null) {
             return;
         }
-
-        // maintain a queue and push the root node
         Queue<Node> nodeQueue = new ArrayDeque<>();
         nodeQueue.add(root);
-
-        // loop till queue is empty
         while (!nodeQueue.isEmpty())
         {
-            // dequeue front node
             Node curr = nodeQueue.poll();
-
-            // swap the left child with the right child
             swapNodes(curr);
-
-            // enqueue left child of the popped node
             if (curr.left != null) {
                 nodeQueue.add(curr.left);
             }
-
-            // enqueue right child of the popped node
             if (curr.right != null) {
                 nodeQueue.add(curr.right);
             }
