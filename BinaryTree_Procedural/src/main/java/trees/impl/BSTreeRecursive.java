@@ -99,28 +99,50 @@ public class BSTreeRecursive implements ITree {
 
     @Override
     public void del(int val) {
-        delInternal(root, val);
+        root = delInternal(root, val);
     }
 
     private Node delInternal(Node node, int value) {
-        if(node == null) return node;
-        if(value > node.value){
-            node.right = delInternal(node.right, value);
-        }else if(value < node.value){
-            node.left = delInternal(node.left, value);
-        }else{
-            if(node.left == null && node.right == null){
-                node = null;
-            }else if(node.right != null){
+        /* Base Case: If the tree is empty */
+        if (node == null)
+            return node;
 
-                node.value = successor(node);
-                node.right = delInternal(node.right, node.value);
-            }else{
-                node.value = predecessor(node);
-                node.left = delInternal(node.left, node.value);
-            }
+        /* Otherwise, recur down the tree */
+        if (value < node.value)
+            node.left = delInternal(node.left, value);
+        else if (value > node.value)
+            node.right = delInternal(node.right, value);
+
+            // if key is same as root's
+            // key, then This is the
+            // node to be deleted
+        else {
+            // node with only one child or no child
+            if (node.left == null)
+                return node.right;
+            else if (node.right == null)
+                return node.left;
+
+            // node with two children: Get the inorder
+            // successor (smallest in the right subtree)
+            node.value = minValue(node.right);
+
+            // Delete the inorder successor
+            node.right = delInternal(node.right, node.value);
         }
-        return root;
+
+        return node;
+    }
+
+    private int minValue(Node node)
+    {
+        int minv = node.value;
+        while (node.left != null)
+        {
+            minv = node.left.value;
+            node = node.left;
+        }
+        return minv;
     }
 
     private int successor(Node node){
@@ -169,7 +191,7 @@ public class BSTreeRecursive implements ITree {
 
     private int getHeightInternal(Node node) {
         if (node == null) {
-            return -1;
+            return 0;
         } else {
             int leftH = getHeightInternal(node.left);
             int rightH = getHeightInternal(node.right);
