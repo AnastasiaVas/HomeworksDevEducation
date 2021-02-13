@@ -123,13 +123,13 @@ public class BSTreeRecursive implements ITree {
 
     private int minValue(Node node)
     {
-        int minv = node.value;
+        int minV = node.value;
         while (node.left != null)
         {
-            minv = node.left.value;
+            minV= node.left.value;
             node = node.left;
         }
-        return minv;
+        return minV;
     }
 
 

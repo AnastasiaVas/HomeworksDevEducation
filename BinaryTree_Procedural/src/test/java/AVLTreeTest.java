@@ -64,16 +64,16 @@ public class AVLTreeTest {
         @Test
         void addLeftTurnTreeTest() {
             AVlTreeRightImb.add(100);
-            int expected = 90;
-            int actual = AVlTreeRightImb.root.left.value;
+            int expected = 100;
+            int actual = AVlTreeRightImb.root.right.right.value;
             assertEquals(expected, actual);
         }
 
         @Test
         void addRightTurnTreeTest() {
             AVlTreeLeftImb.add(77);
-            int expected = 72;
-            int actual = AVlTreeLeftImb.root.right.right.value;
+            int expected = 77;
+            int actual = AVlTreeLeftImb.root.right.left.right.value;
             assertEquals(expected, actual);
         }
 
