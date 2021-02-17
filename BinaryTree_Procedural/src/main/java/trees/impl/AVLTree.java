@@ -214,27 +214,4 @@ public class AVLTree implements ITree {
     public void reverse() {
 
     }
-
-
-  //  public void prettyPrint() {
-  //      printHelper(this.root, "", true);
-  //  }
-//
-  //  private void printHelper(Node currPtr, String indent, boolean last) {
-  //      if (currPtr != null) {
-  //          System.out.print(indent);
-  //          if (last) {
-  //              System.out.print("R----");
-  //              indent += "     ";
-  //          } else {
-  //              System.out.print("L----");
-  //              indent += "|    ";
-  //          }
-//
-  //          System.out.println(currPtr.value + "(BF = " + currPtr.balanceF + ")");
-//
-  //          printHelper(currPtr.left, indent, false);
-  //          printHelper(currPtr.right, indent, true);
-  //      }
-  //  }
 }
