@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -14,12 +15,12 @@ import javax.swing.event.*;
 public class BallWorld extends JPanel {
    private static final int UPDATE_RATE = 30;    // Frames per second (fps)
    private static final float EPSILON_TIME = 1e-2f;  // Threshold for zero time
+   ExecutorService threadExecutor;
 
    Random random = new Random();
    // Balls
-   private static final int MAX_BALLS = 25; // Max number allowed 
    private int currentNumBalls;             // Number currently active
-   private Ball[] balls = new Ball[MAX_BALLS];
+   private ArrayList<Ball> balls = new ArrayList<Ball>();
 
    private ContainerBox box;     // The container rectangular box
    private DrawCanvas canvas;    // The Custom canvas for drawing the box/ball
@@ -62,7 +63,7 @@ public class BallWorld extends JPanel {
 //        balls[4] = new Ball(550, 300, 25, -3, 0, Color.MAGENTA);
 
       currentNumBalls = 0;
-
+      threadExecutor = Executors.newCachedThreadPool();
    //   // The rest of the balls, that can be launched using the launch button
    //   for (int i = currentNumBalls; i < MAX_BALLS; i++) {
    //      // Allocate the balls, but position later before the launch
@@ -112,8 +113,8 @@ public class BallWorld extends JPanel {
                     int maxRadius = (Math.min(canvasWidth, canvasHeight))/8;
                     int speedX = (canvasHeight / 24);
                     int speedY = (canvasWidth / 24);
-                    balls[currentNumBalls] = new Ball(e.getX(), e.getY(), random.nextInt(maxRadius)+1, random.nextInt(speedX)+1, random.nextInt(speedY)+1, Color.CYAN);
-
+                    balls.add(new Ball(e.getX(), e.getY(), random.nextInt(maxRadius)+1, random.nextInt(speedX)+1, random.nextInt(speedY)+1, Color.CYAN));
+                    threadExecutor.execute( balls.get(balls.size() - 1) );
                     currentNumBalls++;
                     transferFocusUpCycle();  // To handle key events
                  } // end mouseClicked
@@ -121,39 +122,39 @@ public class BallWorld extends JPanel {
               } // end MouseAdapter()
       ); // End anonymous inner class
       // Start the ball bouncing
-      gameStart();
+   //   gameStart();
    }
    
    /** Start the ball bouncing. */
-   public void gameStart() {
-      // Run the game logic in its own thread.
-      Thread gameThread = new Thread() {
-         public void run() {
-            while (true) {
-               long beginTimeMillis, timeTakenMillis, timeLeftMillis;
-               beginTimeMillis = System.currentTimeMillis();
-               
-               if (!paused) {
-                  // Execute one game step
-                  gameUpdate();
-                  // Refresh the display
-                  repaint();
-               }
-               
-               // Provide the necessary delay to meet the target rate
-               timeTakenMillis = System.currentTimeMillis() - beginTimeMillis;
-               timeLeftMillis = 1000L / UPDATE_RATE - timeTakenMillis;
-               if (timeLeftMillis < 5) timeLeftMillis = 5; // Set a minimum
-               
-               // Delay and give other thread a chance
-               try {
-                  Thread.sleep(timeLeftMillis);
-               } catch (InterruptedException ex) {}
-            }
-         }
-      };
-      gameThread.start();  // Invoke GaemThread.run()
-   }
+ //  public void gameStart() {
+ //     // Run the game logic in its own thread.
+ //     Thread gameThread = new Thread() {
+ //        public void run() {
+ //           while (true) {
+ //              long beginTimeMillis, timeTakenMillis, timeLeftMillis;
+ //              beginTimeMillis = System.currentTimeMillis();
+ //
+ //              if (!paused) {
+ //                 // Execute one game step
+ //                 gameUpdate();
+ //                 // Refresh the display
+ //                 repaint();
+ //              }
+ //
+ //              // Provide the necessary delay to meet the target rate
+ //              timeTakenMillis = System.currentTimeMillis() - beginTimeMillis;
+ //              timeLeftMillis = 1000L / UPDATE_RATE - timeTakenMillis;
+ //              if (timeLeftMillis < 5) timeLeftMillis = 5; // Set a minimum
+ //
+ //              // Delay and give other thread a chance
+ //              try {
+ //                 Thread.sleep(timeLeftMillis);
+ //              } catch (InterruptedException ex) {}
+ //           }
+ //        }
+ //     };
+ //     gameThread.start();  // Invoke GaemThread.run()
+ //  }
    
    /** 
     * One game time-step. 
@@ -171,26 +172,26 @@ public class BallWorld extends JPanel {
          for (int i = 0; i < currentNumBalls; i++) {
             for (int j = 0; j < currentNumBalls; j++) {
                if (i < j) {
-                  balls[i].intersect(balls[j], tMin);
-                  if (balls[i].earliestCollisionResponse.t < tMin) {
-                     tMin = balls[i].earliestCollisionResponse.t;
+                  balls.get(i).intersect(balls.get(j), tMin);
+                  if (balls.get(i).earliestCollisionResponse.t < tMin) {
+                     tMin = balls.get(i).earliestCollisionResponse.t;
                   }
                }
             }
          }
          // Check collision between the balls and the box
          for (int i = 0; i < currentNumBalls; i++) {
-            balls[i].intersect(box, tMin);
-            if (balls[i].earliestCollisionResponse.t < tMin) {
-               tMin = balls[i].earliestCollisionResponse.t;
+            balls.get(i).intersect(box, tMin);
+            if (balls.get(i).earliestCollisionResponse.t < tMin) {
+               tMin = balls.get(i).earliestCollisionResponse.t;
             }
          }
    
          // Update all the balls up to the detected earliest collision time tMin,
          // or timeLeft if there is no collision.
-         for (int i = 0; i < currentNumBalls; i++) {
-            balls[i].update(tMin);
-         }
+    //     for (int i = 0; i < currentNumBalls; i++) {
+    //        balls[i].update(tMin);
+    //     }
    
          timeLeft -= tMin;                // Subtract the time consumed and repeat
       } while (timeLeft > EPSILON_TIME);  // Ignore remaining time less than threshold
@@ -205,7 +206,7 @@ public class BallWorld extends JPanel {
          // Draw the balls and box
          box.draw(g);
          for (int i = 0; i < currentNumBalls; i++) {
-            balls[i].draw(g);
+            balls.get(i).draw(g);
          }
          // Display balls' information
          g.setColor(Color.WHITE);
@@ -237,11 +238,11 @@ public class BallWorld extends JPanel {
          });
 
          // A slider for adjusting the speed of all the balls by a factor
-         final float[] ballSavedSpeedXs = new float[MAX_BALLS];
-         final float[] ballSavedSpeedYs = new float[MAX_BALLS];
+         final float[] ballSavedSpeedXs = new float[25];
+         final float[] ballSavedSpeedYs = new float[25];
          for (int i = 0; i < currentNumBalls; i++) {
-            ballSavedSpeedXs[i] = balls[i].speedX;
-            ballSavedSpeedYs[i] = balls[i].speedY;
+            ballSavedSpeedXs[i] = balls.get(i).speedX;
+            ballSavedSpeedYs[i] = balls.get(i).speedY;
          }
          int minFactor = 5;    // percent
          int maxFactor = 200;  // percent
@@ -255,8 +256,8 @@ public class BallWorld extends JPanel {
                if (!source.getValueIsAdjusting()) {
                   int percentage = (int)source.getValue();
                   for (int i = 0; i < currentNumBalls; i++) {
-                     balls[i].speedX = ballSavedSpeedXs[i] * percentage / 100.0f;
-                     balls[i].speedY = ballSavedSpeedYs[i] * percentage / 100.0f;
+                     balls.get(i).speedX = ballSavedSpeedXs[i] * percentage / 100.0f;
+                     balls.get(i).speedY = ballSavedSpeedYs[i] * percentage / 100.0f;
                   }
                }
                transferFocusUpCycle();  // To handle key events
@@ -269,15 +270,9 @@ public class BallWorld extends JPanel {
          launchControl.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               if (currentNumBalls < MAX_BALLS) {
-                  balls[currentNumBalls].x = 20;
-                  balls[currentNumBalls].y = canvasHeight - 20;
+                  balls.get(currentNumBalls).x = 20;
+                  balls.get(currentNumBalls).y = canvasHeight - 20;
                   currentNumBalls++;
-                  if (currentNumBalls == MAX_BALLS) {
-                     // Disable the button, as there is no more ball
-                     launchControl.setEnabled(false);
-                  }
-               }
                transferFocusUpCycle();  // To handle key events
             }
          });
@@ -288,14 +283,10 @@ public class BallWorld extends JPanel {
                     @Override
                     public void mouseClicked( MouseEvent e )
                     {
-                       balls[currentNumBalls].x = e.getX();
-                       balls[currentNumBalls].y = e.getY();
+                       balls.get(currentNumBalls).x = e.getX();
+                       balls.get(currentNumBalls).y = e.getY();
 
                        currentNumBalls++;
-                       if (currentNumBalls == MAX_BALLS) {
-                          // Disable the button, as there is no more ball
-                          launchControl.setEnabled(false);
-                       }
                        transferFocusUpCycle();  // To handle key events
                     } // end mouseClicked
 

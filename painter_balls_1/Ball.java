@@ -9,7 +9,7 @@ import collisionphysics.*;
  * @author Hock-Chuan Chua
  * @version v0.4 (31 October 2010)
  */
-public class Ball {
+public class Ball implements Runnable {
    float x, y;           // Ball's center x and y (package access)
    float speedX, speedY; // Ball's speed per step in x and y (package access)
    float radius;         // Ball's radius (package access)
@@ -94,19 +94,19 @@ public class Ball {
     *    If this ball's earliestCollisionResponse.time equals to time, this
     *    ball is the one that collided; otherwise, there is a collision elsewhere.
     */
-   public void update(float time) {
-      // Check if this ball is responsible for the first collision?
-      if (earliestCollisionResponse.t <= time) { // FIXME: threshold?
-         // This ball collided, get the new position and speed
-         this.x = earliestCollisionResponse.getNewX(this.x, this.speedX);
-         this.y = earliestCollisionResponse.getNewY(this.y, this.speedY);
-         this.speedX = earliestCollisionResponse.newSpeedX;
-         this.speedY = earliestCollisionResponse.newSpeedY;
-      } else {
+   public void update() {
+ //    // Check if this ball is responsible for the first collision?
+ //    if (earliestCollisionResponse.t <= time) { // FIXME: threshold?
+ //       // This ball collided, get the new position and speed
+ //       this.x = earliestCollisionResponse.getNewX(this.x, this.speedX);
+ //       this.y = earliestCollisionResponse.getNewY(this.y, this.speedY);
+ //       this.speedX = earliestCollisionResponse.newSpeedX;
+ //       this.speedY = earliestCollisionResponse.newSpeedY;
+ //    } else {
          // This ball does not involve in a collision. Move straight.
-         this.x += this.speedX * time;
-         this.y += this.speedY * time;
-      }
+         this.x += this.speedX;
+         this.y += this.speedY;
+  //    }
       // Clear for the next collision detection
       earliestCollisionResponse.reset();
    }
@@ -150,4 +150,17 @@ public class Ball {
    private StringBuilder sb = new StringBuilder();
    private Formatter formatter = new Formatter(sb);
 
+   @Override
+   public void run() {
+      while(true)
+      {
+         update();
+
+         try
+         {
+            Thread.sleep(20);
+         }
+         catch(Exception e){}
+      }
+   }
 }
