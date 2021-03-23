@@ -30,7 +30,7 @@ public class RequestLoggingFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
 
-        User user = new User((String) req.getSession().getAttribute("login"), (String) req.getSession().getAttribute("password"));
+        User user = (User) req.getSession().getAttribute("user");
 
         HttpSession session = req.getSession(false);
 
